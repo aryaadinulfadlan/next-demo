@@ -10,9 +10,11 @@ export default async function Home() {
       <hr className="my-10" />
       <p>Posts List:</p>
       <div className="flex flex-col gap-3 mx-auto w-[300px] mt-2">
-        {posts.map((el) => (
-          <PostCard key={el.id} post={el} />
-        ))}
+        {posts.length ? (
+          posts.map((el) => <PostCard key={el.id} post={el} />)
+        ) : (
+          <p className="text-center font-bold">No Post Available</p>
+        )}
       </div>
     </div>
   );

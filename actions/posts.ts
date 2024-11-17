@@ -2,7 +2,7 @@
 
 import db from "@/lib/db";
 import { CreatePostSchema } from "@/schemas/post";
-import { CreatePostFormState } from "@/actions/types";
+import { CreatePostFormState, DeletePostFormState } from "@/actions/types";
 import { revalidatePath } from "next/cache";
 
 export async function createPost(
@@ -43,6 +43,22 @@ export async function createPost(
   }
 }
 
-export async function deletePost() {
-  console.log("DELETED");
+export async function deletePost(id: string): Promise<DeletePostFormState> {
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+  try {
+    await db.post.delete({
+      where: {
+        id,
+      },
+    });
+    return {
+      message: "Deleted Successfully!",
+    };
+  } catch (error) {
+    return {
+      message: "An error occured",
+    };
+  } finally {
+    revalidatePath("/");
+  }
 }

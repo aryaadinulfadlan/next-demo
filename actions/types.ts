@@ -5,3 +5,7 @@ export type CreatePostFormState = {
   };
   message?: string;
 } | null;
+
+export type DeletePostFormState = {
+  message: string;
+} | null;
