@@ -1,17 +1,48 @@
 "use server";
 
 import db from "@/lib/db";
+import { CreatePostSchema } from "@/schemas/post";
+import { CreatePostFormState } from "@/actions/types";
 import { revalidatePath } from "next/cache";
 
-export async function createPost(formData: FormData) {
-  // validation here
-  const title = formData.get("title") as string;
-  const content = formData.get("content") as string;
-  await db.post.create({
-    data: {
-      title,
-      content,
-    },
+export async function createPost(
+  _prevState: CreatePostFormState,
+  formData: FormData
+): Promise<CreatePostFormState> {
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+  const validatedFields = CreatePostSchema.safeParse({
+    title: formData.get("title") as string,
+    content: formData.get("content") as string,
   });
-  revalidatePath("/");
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+  try {
+    const posted = await db.post.create({
+      data: {
+        title: validatedFields.data.title,
+        content: validatedFields.data.content,
+      },
+    });
+    if (!posted) {
+      return {
+        message: "An error occured on the server",
+      };
+    }
+    return {
+      message: "Successfully Post New Item!",
+    };
+  } catch (error) {
+    return {
+      message: "An error occured on the server",
+    };
+  } finally {
+    revalidatePath("/");
+  }
+}
+
+export async function deletePost() {
+  console.log("DELETED");
 }
