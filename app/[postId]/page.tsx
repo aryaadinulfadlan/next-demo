@@ -14,7 +14,6 @@ export default async function PostDetail({ params, searchParams }: PageProps) {
       id: pageParams.postId,
     },
   });
-  console.log({ postItem });
   return (
     <div className="max-w-xl mx-auto py-10 px-2 w-fit">
       <div className="bg-slate-500 rounded-md w-[300px] p-4">

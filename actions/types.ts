@@ -9,3 +9,8 @@ export type CreatePostFormState = {
 export type DeletePostFormState = {
   message: string;
 } | null;
+
+export interface PostUpdateData {
+  title: string;
+  content: string;
+}

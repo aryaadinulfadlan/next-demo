@@ -2,7 +2,11 @@
 
 import db from "@/lib/db";
 import { CreatePostSchema } from "@/schemas/post";
-import { CreatePostFormState, DeletePostFormState } from "@/actions/types";
+import {
+  CreatePostFormState,
+  DeletePostFormState,
+  PostUpdateData,
+} from "@/actions/types";
 import { revalidatePath } from "next/cache";
 
 export async function createPost(
@@ -56,9 +60,39 @@ export async function deletePost(id: string): Promise<DeletePostFormState> {
     };
   } catch (error) {
     return {
-      message: "An error occured",
+      message: "An error occured on the server",
     };
   } finally {
     revalidatePath("/");
+  }
+}
+
+export async function updatePost(
+  postId: string,
+  { content, title }: PostUpdateData
+) {
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+  try {
+    const postData = await db.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        title,
+        content,
+      },
+    });
+    if (!postData) {
+      return {
+        message: "An error occured on the server",
+      };
+    }
+    return {
+      message: "Successfully Post Update!",
+    };
+  } catch (error) {
+    return {
+      message: "An error occured on the server",
+    };
   }
 }

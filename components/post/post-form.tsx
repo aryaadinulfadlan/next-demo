@@ -5,8 +5,6 @@ import { useActionState } from "react";
 
 export default function PostForm() {
   const [state, formAction, isPending] = useActionState(createPost, null);
-
-  console.log({ state });
   return (
     <>
       <p>Create a new post here:</p>
@@ -23,7 +21,7 @@ export default function PostForm() {
             disabled={isPending}
           />
           {state?.errors?.title && (
-            <p className="text-red-500">{state.errors.title}</p>
+            <p className="text-red-300">{state.errors.title}</p>
           )}
         </div>
         <div className="flex flex-col gap-1">
@@ -35,7 +33,7 @@ export default function PostForm() {
             disabled={isPending}
           />
           {state?.errors?.content && (
-            <p className="text-red-500">{state.errors.content}</p>
+            <p className="text-red-300">{state.errors.content}</p>
           )}
         </div>
         <button
