@@ -2,19 +2,38 @@
 
 import { Post } from "@prisma/client";
 import PostCard from "./post-card";
-import { useActionState } from "react";
+import { useActionState, useOptimistic } from "react";
 import { createPost } from "@/actions/posts";
 
 interface Props {
   posts: Array<Post>;
 }
+
 export default function PostList({ posts }: Props) {
   const [state, formAction, isPending] = useActionState(createPost, null);
+  const [optimisticData, addOptimisticData] = useOptimistic(
+    posts,
+    (state, newData: Post) => [newData, ...state]
+  );
+  function clientAction(formData: FormData) {
+    const title = formData.get("title") as string;
+    const content = formData.get("content") as string;
+    addOptimisticData({
+      id: "",
+      title,
+      content,
+      published: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    formAction(formData);
+  }
+  console.log({ optimisticData });
   return (
     <>
       <p>Create a new post here:</p>
       <form
-        action={formAction}
+        action={clientAction}
         className="flex flex-col gap-3 w-[300px] mx-auto mt-2"
       >
         <div className="flex flex-col gap-1">
@@ -53,7 +72,12 @@ export default function PostList({ posts }: Props) {
       <p>Posts List:</p>
       <div className="flex flex-col gap-3 mx-auto w-[300px] mt-2">
         {posts.length ? (
-          posts.map((el) => <PostCard key={el.id} post={el} />)
+          <>
+            {isPending && <PostCard post={{ ...optimisticData[0] }} />}
+            {posts.map((el) => (
+              <PostCard key={el.id} post={el} />
+            ))}
+          </>
         ) : (
           <p className="text-center font-bold">No Post Available</p>
         )}

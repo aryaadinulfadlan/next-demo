@@ -13,7 +13,7 @@ export async function createPost(
   _prevState: CreatePostFormState,
   formData: FormData
 ): Promise<CreatePostFormState> {
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+  await new Promise((resolve) => setTimeout(resolve, 4000));
   const validatedFields = CreatePostSchema.safeParse({
     title: formData.get("title") as string,
     content: formData.get("content") as string,
