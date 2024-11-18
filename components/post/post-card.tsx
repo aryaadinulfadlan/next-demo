@@ -29,7 +29,7 @@ export default function PostCard({ post }: PostCardProps) {
       <p className="font-bold">Content: {content}</p>
       <div className="mt-4 flex gap-3">
         <Link href={`/${id}`} className="px-4 py-1 bg-slate-700 rounded-md">
-          Edit
+          View
         </Link>
         <button
           onClick={handleDelete}
