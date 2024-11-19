@@ -7,6 +7,7 @@ interface PageProps {
   searchParams: Promise<{ [key: string]: string | Array<string> | undefined }>;
 }
 export default async function PostDetail({ params, searchParams }: PageProps) {
+  await new Promise((resolve) => setTimeout(resolve, 3000));
   const pageParams = await params;
   const pageSearchParams = await searchParams;
   const postItem = await db.post.findUnique({
