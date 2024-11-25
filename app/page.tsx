@@ -1,5 +1,5 @@
+import Dummy from "@/components/dummy";
 import PostList from "@/components/post/post-list";
-import Test from "@/components/test";
 import WithLoading from "@/hocs/with-loading";
 import db from "@/lib/db";
 
@@ -11,15 +11,16 @@ function blockingAsyncOperation() {
     }, 2000);
   });
 }
-const TestWithLoading = WithLoading(Test);
+const TestWithLoading = WithLoading(Dummy);
 export default async function Home() {
   const posts = await db.post.findMany({ orderBy: { createdAt: "desc" } });
-  console.log("SATU");
+  // console.log("SATU");
   // await blockingAsyncOperation();
-  blockingAsyncOperation()
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err));
-  console.log("TIGA");
+  // blockingAsyncOperation()
+  //   .then((res) => console.log(res))
+  //   .catch((err) => console.log(err));
+  // console.log("TIGA");
+
   // const externalAPIs = await fetch("http://localhost:4000/api/users");
   // const response = await externalAPIs.json();
   // console.log({ externalAPIsResponse: response });
